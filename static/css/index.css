@@ -152,3 +152,7 @@ body {
 .margin-top-10{
   margin-top: 15px;
 }
+
+.navbar-end {
+  margin-right: -300px; 
+}

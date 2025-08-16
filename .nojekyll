@@ -1,1 +1,118 @@
+<section class="hero is-link is-fullheight video" style="overflow: hidden; position:relative;">
+  <div class="hero-video" style="height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
+    <video playsinline autoplay muted loop>
+      <source src="./static/videos/2.1_compress.mp4" type="video/mp4"> #TODO: add teaser video
+    </video>
+  </div>
+  <!-- <div class="hero-video is-hidden-tablet is-inline-block-mobile"
+    style="height: 154.28571428vw; width: 100%; min-width:64.81481481vh;min-height:100%;">
+    <video playsinline autoplay muted loop>
+      <source src="./static/videos/mobile_teaser_3.mp4" type="video/mp4">
+    </video>
+  </div> -->
+  <div class="is-hidden-tablet"
+    style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background-color: black; left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);">
+    <video playsinline autoplay muted loop style="width: 90%; height: auto; min-height: 100%;">
+      <source src="./static/videos/2.1_compress.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="overlay"></div>
+  <!-- Hero head: will stick at the top -->
+  <div class="hero-head is-hidden-mobile">
+    <header class="navbar">
+      <div class="container is-size-5">
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item pl-4 pr-4 paper-link" href="https://arxiv.org/pdf/2502.17894">
+              <span class="icon" style="margin-right:5px;">
+                <img src="./static/images/pdf.svg" alt="PDF" />
+              </span>
+              <span>Paper</span>
+            </a>
+            <a class="navbar-item  pl-4 pr-4 arxiv-link" href="https://arxiv.org/abs/2502.17894">
+              <span class="icon" style="margin-right:5px;">
+                <img src="./static/images/arxiv.svg" alt="ArXiv" />
+              </span>
+              <span>arXiv</span> </a>
+            <a href="#video" class="navbar-item  pl-4 pr-4">
+              <span class="icon" style="margin-right:5px;">
+                <img src="./static/images/youtube.svg" alt="Youtube" />
+              </span>
+              <span>Video</span> </a>
+            <span class="navbar-item  pl-4 pr-4">
+                <a class="external-link button is-normal is-rounded is-dark github-link"
+                href="javascript:void(0);" style="pointer-events: none; cursor: default;">
+               <span class="icon">
+                 <img src="./static/images/github-mark.svg" alt="GitHub" />
+               </span>
+               <span>Code (coming soon)</span>
+             </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
 
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body">
+    <div class="container has-text-centered">
+        <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 9rem; font-style: italic;">
+            FetchBot
+        </h1>
+      <h1 class="subtitle is-1 publication-title is-size-3-mobile" style="font-size: 4rem;">
+        Learning Generalizable Object Fetching in Cluttered Scenes via Zero-Shot Sim2Real
+      </h1>
+      <h1 class="subtitle is-1 publication-title is-size-3-mobile" 
+      style="font-size: 2.5rem; font-style: italic;">
+    Conference on Robot Learning 2025 
+    <span style="color:#E52020;">(Oral Presentation)</span>
+    </h1>
+      <!-- <h1 class="is-2 is-italic is-size-4-mobile" style="font-size: 2rem; opacity: 80%;">
+        Anonymous Submission
+      </h1> -->
+      <div class="column has-text-centered is-hidden-tablet">
+        <div class="publication-links">
+          <!-- PDF Link. -->
+          <span class="link-block">
+            <a href="https://arxiv.org/pdf/2502.17894" class="external-link button is-normal is-rounded is-dark paper-link">
+              <span class="icon">
+                <img src="./static/images/pdf.svg" alt="PDF" />
+              </span>
+              <span>Paper</span>
+            </a>
+          </span>
+          <span class="link-block">
+            <a href="https://arxiv.org/abs/2502.17894" class="external-link button is-normal is-rounded is-dark arxiv-link">
+              <span class="icon">
+                <img src="./static/images/arxiv.svg" alt="ArXiv" />
+              </span>
+              <span>arXiv</span>
+            </a>
+          </span>
+          <!-- Video Link. -->
+          <span class="link-block">
+            <a href="#video" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <img src="./static/images/youtube.svg" alt="Youtube" />
+              </span>
+              <span>Video</span>
+            </a>
+          </span>
+          <!-- Code Link. -->
+          <span class="link-block">
+            <a class="external-link button is-normal is-rounded is-dark github-link"
+            href="javascript:void(0);" style="pointer-events: none; cursor: default;">
+           <span class="icon">
+             <img src="./static/images/github-mark.svg" alt="GitHub" />
+           </span>
+           <span>Code (coming soon)</span>
+         </a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>

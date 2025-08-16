@@ -1,656 +1,953 @@
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link rel="shortcut icon" type="image/x-icon" href="static/icon/img.ico">
-    <meta charset="utf-8">
-    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
-    <!-- Replace the content tag with appropriate information -->
-    <meta name="description" content="DESCRIPTION META TAG">
-    <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
-    <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
-    <meta property="og:url" content="URL OF THE WEBSITE" />
-    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
-    <meta property="og:image" content="static/image/your_banner_image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+  <meta charset="utf-8">
+  <meta name="description"
+    content="FetchBot: Learning Generalizable Object Fetching in Cluttered Scenes via Zero-Shot Sim2Real">
+  <meta name="keywords" content="Robot Learning, Generalizable Fetching, Sim2Real, Occlusion Handling, Reinforcement Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    FetchBot: Learning Generalizable Object Fetching in Cluttered Scenes via Zero-Shot Sim2Real
+  </title>
+
+  <link rel="icon" type="image/png" href="./static/icon/icon.png">
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://kit.fontawesome.com/19914a84eb.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <script>
+    function updateMethodVideo() {
+    const task = document.getElementById("single-menu-task").value;
+
+    const normalVideos = document.getElementById("normal-videos");
+    const miscVideos = document.getElementById("misc-videos");
+
+    if (task === "Misc_Type") {
+        normalVideos.style.display = "none";
+        miscVideos.style.display = "";
+
+        document.getElementById("misc-video-1").getElementsByTagName("video")[0].src = "static/videos/comparison/Misc_Type_1.mp4";
+        document.getElementById("misc-video-2").getElementsByTagName("video")[0].src = "static/videos/comparison/Misc_Type_2.mp4";
+        document.getElementById("misc-video-3").getElementsByTagName("video")[0].src = "static/videos/comparison/Misc_Type_3.mp4";
+
+    } else {
+        normalVideos.style.display = "";
+        miscVideos.style.display = "none";
+
+        document.getElementById("result-video-ours").getElementsByTagName("video")[0].src      = "static/videos/comparison/" + task + "_ours.mp4";
+        document.getElementById("result-video-heuristic").getElementsByTagName("video")[0].src = "static/videos/comparison/" + task + "_heuristic.mp4";
+        document.getElementById("result-video-dp").getElementsByTagName("video")[0].src        = "static/videos/comparison/" + task + "_dp.mp4";
+        document.getElementById("result-video-dp3").getElementsByTagName("video")[0].src       = "static/videos/comparison/" + task + "_dp3.mp4";
+    }
+    }
 
 
-    <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
-    <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
-    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
-    <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <!-- Keywords for your paper to be indexed by-->
-    <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-    <title>FetchBot</title>
-    <!-- <link rel="icon" type="image/x-icon" href="static/images/favicon.ico"> -->
-    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-
-    <link rel="stylesheet" href="static/css/bulma.min.css">
-    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
-    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    <link rel="stylesheet" href="static/css/index.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
-    <script defer src="static/js/fontawesome.all.min.js"></script>
-    <script src="static/js/bulma-carousel.min.js"></script>
-    <script src="static/js/bulma-slider.min.js"></script>
-    <script src="static/js/index.js"></script>
+    function onLoadFunction() {
+      updateMethodVideo();
+    }
+</script>
 </head>
 
-<body>
 
-
-    <section class="hero">
-        <div class="hero-body" style="padding-bottom: 1rem;">
-            <div class="container is-max-desktop">
-                <div class="columns is-centered">
-                    <div class="column has-text-centered">
-                        <h1 class="title is-1 publication-title">FetchBot: Object Fetching in Cluttered Shelves via
-                            Zero-Shot Sim2Real</h1>
-                        <div class="is-size-5 publication-authors">
-                            <span class="author-block">
-                                <a href="https://weiheng-liu.github.io/" target="_blank">Weiheng Liu</a><sup>*</sup>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://github.com/Yaser-wyx" target="_blank">Yuxuan Wan</a><sup>*</sup>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://42jaylonw.github.io/" target="_blank">Jilong Wang</a>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://github.com/yxKryptonite" target="_blank">Yuxuan Kuang</a>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://scholar.google.com/citations?user=wRBbtl8AAAAJ&hl=en" target="_blank">Xuesong Shi</a>,
-                            </span>
-                            <br>
-                            <span class="author-block">
-                                <a href="https://scholar.google.com/citations?user=kalE5UIAAAAJ&hl=en" target="_blank">Haoran Li</a>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://people.ucas.ac.cn/~zhaodongbin?language=en" target="_blank">Dongbin Zhao</a>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://scholar.google.com/citations?user=X7M0I8kAAAAJ&hl=en" target="_blank">Zhizheng Zhang</a><sup>†</sup>,
-                            </span>
-                            <span class="author-block margein-left">
-                                <a href="https://hughw19.github.io/" target="_blank">He Wang</a><sup>†</sup>
-                            </span>
-                        </div>
-
-                        <div class="is-size-5 publication-authors">
-                            <img src="./static/images/institution.jpg" alt="FetchBot"
-                                class="center-img blend-img-background" , style="width: 400px; height: auto;">
-                            <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal
-                                    Contribution&nbsp;&nbsp;&nbsp;<sup>†</sup>Indicates Corresponding
-                                    Authors</small></span>
-                        </div>
-
-                        <div class="column has-text-centered">
-                            <div class="publication-links">
-                                <!-- Arxiv PDF link -->
-                                <span class="link-block">
-                                    <a href="https://arxiv.org/abs/2502.17894" target="_blank"
-                                        class="external-link button is-normal is-rounded is-dark">
-                                        <span class="icon">
-                                            <i class="fas fa-file-pdf"></i>
-                                        </span>
-                                        <span>Paper</span>
-                                    </a>
-                                </span>
-                                <!-- Github link -->
-                                <span class="link-block ">
-                                    <a target="_blank" class="external-link button is-normal is-rounded is-light">
-                                        <span class="icon">
-                                            <i class="fab fa-github"></i>
-                                        </span>
-                                        <span>Code (Coming soon)</span>
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+<body onload="onLoadFunction();">
+    <section class="hero is-link is-fullheight video" style="overflow: hidden; position:relative;">
+        <div class="hero-video" style="height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
+          <video playsinline autoplay muted loop>
+            <source src="./static/videos/teaser_compress.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="overlay"></div>
+        <!-- Hero head: will stick at the top -->
+        <div class="hero-head is-hidden-mobile">
+          <header class="navbar">
+            <div class="container is-size-5">
+              <div class="navbar-menu">
+                <div class="navbar-end">
+                  <a class="navbar-item pl-4 pr-4" href="https://arxiv.org/pdf/2502.17894">
+                    <span class="icon" style="margin-right:5px;">
+                      <img src="./static/images/pdf.svg" alt="PDF" />
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                  <a class="navbar-item  pl-4 pr-4" href="https://arxiv.org/abs/2502.17894">
+                    <span class="icon" style="margin-right:5px;">
+                      <img src="./static/images/arxiv.svg" alt="ArXiv" />
+                    </span>
+                    <span>arXiv</span> </a>
+                    <a href="#video" class="navbar-item  pl-4 pr-4">
+                        <span class="icon" style="margin-right:5px;">
+                          <img src="./static/images/youtube.svg" alt="Youtube" />
+                        </span>
+                        <span>Video</span> </a>
+                  <span class="navbar-item  pl-4 pr-4">
+                    <a class="external-link button is-normal is-rounded is-dark github-link"
+                    href="https://github.com/weiheng-liu/FetchBot" target="_blank">
+                   <span class="icon">
+                     <img src="./static/images/github-mark.svg" alt="GitHub" />
+                   </span>
+                   <span>Code (comming soon)</span>
+                 </a>                 
+                  </span>
                 </div>
+              </div>
             </div>
+          </header>
         </div>
-    </section>
-
-
-    <!-- Teaser video-->
-    <section class="hero teaser">
-        <div class="container is-max-desktop">
-            <div class="hero-body">
-                <img src="./static/images/teaser.png" alt="" style="width: 1500px; height: auto;">
-                <!-- <video poster="" id="tree" autoplay controls muted loop height="100%"> -->
-                <!-- Your video here -->
-                <!-- <source src="static/videos/demo.mp4" type="video/mp4"> -->
-                <!-- </video>  -->
-                <h2 class="subtitle has-text-centered">
-                    FetchBot is capable of handling a variety of real-world shelf scenarios, including obstacles on one
-                    side,
-                    obstacles on both sides, transparent obstacles, and dynamic environments.
-                </h2>
-            </div>
-        </div>
-    </section>
-    <!-- End teaser video -->
-
-    <!-- Paper abstract -->
-    <section class="section hero is-light">
-        <div class="container is-max-desktop">
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-four-fifths">
-                    <h2 class="title is-2">Abstract</h2>
-                    <div class="content has-text-justified">
-                        <p>
-                            Object fetching from cluttered shelves is an important capability for robots to assist
-                            humans in
-                            real-world scenarios.
-                            Achieving this task demands robotic behaviors that prioritize safety by minimizing
-                            disturbances
-                            to
-                            surrounding objects—an
-                            essential but highly challenging requirement due to restricted motion space, limited fields
-                            of
-                            view, and
-                            complex object dynamics.
-                            In this paper, we introduce FetchBot, a sim-to-real framework designed to enable zero-shot
-                            generalizable
-                            and safety-aware
-                            object fetching from cluttered shelves in real-world settings. To address data scarcity, we
-                            propose an
-                            efficient voxel-based method
-                            for generating diverse simulated cluttered shelf scenes at scale and train a dynamics-aware
-                            reinforcement
-                            learning (RL) policy to generate
-                            object fetching trajectories within these scenes. This RL policy, which leverages oracle
-                            information, is
-                            subsequently distilled into a
-                            vision-based policy for real-world deployment. Considering that sim-to-real discrepancies
-                            stem
-                            from
-                            texture variations mostly while from geometric
-                            dimensions rarely, we propose to adopt depth information estimated by full-fledged depth
-                            foundation models
-                            as the input for the vision-based policy
-                            to mitigate sim-to-real gap. To tackle the challenge of limited views, we design a novel
-                            architecture for
-                            learning multi-view representations,
-                            allowing for comprehensive encoding of cluttered shelf scenes. This enables FetchBot to
-                            effectively
-                            minimize collisions while fetching
-                            objects from varying positions and depths, ensuring robust and safety-aware operation. Both
-                            simulation and
-                            real-robot experiments demonstrate
-                            FetchBot's superior generalization ability, particularly in handling a broad range of
-                            real-world
-                            scenarios, including diverse scene layouts
-                            and objects with varying geometries and dimensions.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End paper abstract -->
-
-
-    <section class="hero is-small">
-        <div class="hero-body ">
-            <div class="container is-max-desktop">
-                <div class="columns is-centered has-text-centered">
-                    <div class="column ">
-                        <div class="content">
-                            <!-- <h1 class="title is-2">Method</h1> -->
-                            <h1 class="title is-3">Method Pipeline</h1>
-                            <img src="./static/images/pipeline.png" alt="FetchBot"
-                                class="center-img blend-img-background">
-                            <div class="has-text-justified level-set">
-                                <p class="has-text-justified">
-                                    <b>The overview of FetchBot</b>. In the <b>(a) Sim Data Generation stage</b>, we use
-                                    UniVoxGen to generate a diverse set of scenes and employ
-                                    a dynamics-aware RL policy to collect expert trajectories.
-                                    In the <b>(b) Pre-training stage</b>, we first
-                                    leverage a foundation model to mitigate the sim-to-real gap, then introduce an
-                                    occupancy
-                                    prediction task to learn
-                                    a voxel-based representation. This task encourages the network to preserve essential
-                                    geometric information and develop a
-                                    comprehensive understanding of the scene.
-                                    In the <b>(c) Policy Training stage</b>, we distill these expert trajectories into a
-                                    vision-based policy
-                                    through imitation learning.
-                                    After training, the vision-based policy can zero-shot transfer to <b>(d) Real
-                                        World</b>.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-    <section class="hero is-small">
-        <div class="hero-body ">
-            <div class="container is-max-desktop">
-                <div class="columns is-centered has-text-centered">
-                    <div class="column ">
-                        <div class="content">
-                            <h1 class="title is-3">State-Based Policy</h1>
-                            <img src="./static/images/state_policy.png" alt="FetchBot"
-                                class="center-img blend-img-background" , style="width: 800px; height: auto;">
-                            <div class="has-text-justified level-set">
-                                <p class="has-text-justified">
-                                    <b>Scene Encoder Network in State-Based Policy.</b> The network follows a
-                                    hierarchical
-                                    design.
-                                    First, a local network is used to extract features specific to the individual
-                                    objects
-                                    within the scene.
-                                    Then, a global network processes these features to capture the overall structure and
-                                    context of the entire scene.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="hero is-small">
-        <div class="hero-body ">
-            <div class="container is-max-desktop">
-                <div class="columns is-centered has-text-centered">
-                    <div class="column ">
-                        <div class="content">
-                            <h1 class="title is-3">Vision-Based Policy</h1>
-                            <img src="./static/images/vision_policy.png" alt="FetchBot"
-                                class="center-img blend-img-background">
-                            <div class="has-text-justified level-set">
-                                <p class="has-text-justified">
-                                    <b>3D Vision Policy.</b> The <b>Perception module</b> efficiently integrates
-                                    features
-                                    from multiple perspectives into a unified voxel-based representation, focusing
-                                    solely on
-                                    the region around the robotic gripper.
-                                    The <b>Decision module</b> processes the features output by the Perception module
-                                    using
-                                    a transformer and employs a high-capacity Diffusion Policy as the core component for
-                                    action generation.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="hero is-small">
+      
+        <!-- Hero content: will be in the middle -->
         <div class="hero-body">
-            <div class="container is-max-desktop has-text-centered">
-                <h2 class="title is-3">Real-Robot Experiments <span class=" title is-4">(All videos are played at 1x speed)</span></h2>
-                <h2 class="title is-5 no-margin">Compared with Heuristic baseline in the real-world</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/Heuristic1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Scenario: 1</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/Heuristic2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Scenario: 2</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/Heuristic3_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Scenario: 3</div>
-                    </div>
-                </div>
-
-                <h2 class="title is-5 no-margin">Generalization to obstacle positions</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/2.1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The obstacle is on the <strong>left</strong></div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/2.2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The obstacle is on the <strong>right</strong></div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/2.3_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The obstacle is on <strong>both sides</strong></div>
-                    </div>
-                </div>
-
-
-                <h2 class="title is-5 no-margin">Generalization to target dimension</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/3.1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The target has a <strong>small</strong> dimension</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/3.2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The target has a <strong>medium</strong> dimension</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/3.3_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">The target has a <strong>large</strong> dimension</div>
-                    </div>
-                </div>
-
-                <h2 class="title is-5 no-margin">Generalization to the geometry of obstacles</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/4.1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Geometry type: 1</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/4.2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Geometry type: 2</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/4.3_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Geometry type: 3</div>
-                    </div>
-                </div>
-
-                <h2 class="title is-5 no-margin">Generalization to obstacles and targets</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/5.1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Varying obstacle and target: 1</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/5.2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Varying obstacle and target: 2</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/5.3_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Varying obstacle and target: 3</div>
-                    </div>
-                </div>
-
-                <h2 class="title is-5 no-margin">Dynamic environments</h2>
-                <div class="video-row-container">
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/6.1_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Dynamic environment: 1</div>
-                    </div>
-                    <div class="video-container">
-                        <video autoplay="" playsinline="" controls="" muted="" loop="">
-                            <source src="static/videos/6.2_compress.mp4" type="video/mp4">
-                        </video>
-                        <div class="description">Dynamic environment: 2</div>
-                    </div>
-                </div>
+          <div class="container has-text-centered">
+            <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 9rem; font-style: italic;">
+                FetchBot
+            </h1>
+            <h1 class="subtitle is-1 publication-title is-size-3-mobile" style="font-size: 4rem;">
+                Learning Generalizable Object Fetching in Cluttered Scenes via Zero-Shot Sim2Real
+              </h1>
+              <h1 class="subtitle is-1 publication-title is-size-3-mobile" 
+              style="font-size: 2.5rem; font-style: italic;">
+            Conference on Robot Learning 2025 
+            <span style="color:#E52020;">(Oral Presentation)</span>
+            </h1>
+            <!--  <h1 class="is-2 is-italic is-size-4-mobile" style="font-size: 1.5rem; opacity: 80%;">
+              <b>Spotlight</b> WCBM Workshop CoRL 2024
+            </h1>
+            <h1 class="is-2 is-italic is-size-4-mobile" style="font-size: 1.5rem; opacity: 80%;">
+              X-Embodiment Workshop CoRL 2024
+            </h1> -->
+            <div class="column has-text-centered is-hidden-tablet">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                    <a href="https://arxiv.org/pdf/2502.17894" class="external-link button is-normal is-rounded is-dark paper-link">
+                        <span class="icon">
+                          <img src="./static/images/pdf.svg" alt="PDF" />
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                </span>
+                <span class="link-block">
+                    <a href="https://arxiv.org/abs/2502.17894" class="external-link button is-normal is-rounded is-dark arxiv-link">
+                        <span class="icon">
+                          <img src="./static/images/arxiv.svg" alt="ArXiv" />
+                        </span>
+                        <span>arXiv</span>
+                      </a>
+                </span>
+                <!-- Video Link. -->
+                <span class="link-block">
+                    <a href="#video" class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <img src="./static/images/youtube.svg" alt="Youtube" />
+                        </span>
+                        <span>Video</span>
+                      </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                    <a class="external-link button is-normal is-rounded is-dark github-link"
+                    href="https://github.com/weiheng-liu/FetchBot" target="_blank">
+                   <span class="icon">
+                     <img src="./static/images/github-mark.svg" alt="GitHub" />
+                   </span>
+                   <span>Code (comming soon)</span>
+                 </a>
+                 
+                </span>
+              </div>
             </div>
+          </div>
+      
         </div>
-    </section>
+      
+        <!-- Hero footer: will stick at the bottom -->
+        <!-- <div class="hero-foot is-hidden-mobile">
+          <nav class="tabs is-boxed is-fullwidth is-size-4">
+            <ul>
+              <li><a href="#agile-skills">Agile Whole-Body Skills</a></li>
+              <li><a href="#before-after-asap"></a>Before/After ASAP Fine-tuning</a></li>
+              <li><a href="#abstract">Abstract</a></li>
+              <li><a href="#method">Method</a></li>
+            </ul>
+          </nav>
+        </div> -->
+  <!-- Hero footer: will stick at the bottom -->
+  <div class="hero-foot">
+    <nav class="tabs is-boxed is-fullwidth" style="font-size: 1.75rem;">
+      <ul>
+        <li><a href="#video">Summary Video</a></li>
+        <li><a href="#framework">Framework: FetchBot</a></li>
+        <li><a href="#sim_result">Simulation Results</a></li>
+        <li><a href="#real_world_results">Real World Results</a></li>
+        <!-- <li><a href="#qa">Q & A</a></li> -->
+      </ul>
+    </nav>
+  </div>
+</section>
 
-    <section class="hero is-small">
-        <div class="hero-body">
-            <div class="container is-max-desktop has-text-centered">
-                <h2 class="title is-3">Additional real-robot experiments with more details</h2>
-                <h2 class="title is-4" style="margin-bottom: 0px;">Generalization to obstacle positions</h2>
-                <div class="carousel results-carousel">
-                    <div class="item item-video1">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <source src="static/videos/position1_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video2">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <source src="static/videos/position2_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <source src="static/videos/position3_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <source src="static/videos/position4_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <h2 class="title is-4 margin-top-10" style="margin-bottom: 0px;">Generalization to target dimension</h2>
-                <div class="carousel results-carousel">
-                    <div class="item item-video1">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention1_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video2">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention2_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention3_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention4_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention5_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/dimention6_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <h2 class="title is-4 margin-top-10" style="margin-bottom: 0px;">Generalization to the geometry of obstacles</h2>
-                <div class="carousel results-carousel">
-                    <div class="item item-video1">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle1_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video2">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle2_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle3_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle4_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle5_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/obstacle6_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <h2 class="title is-4 margin-top-10" style="margin-bottom: 0px;">Generalization to obstacles and targets</h2>
-                <div class="carousel results-carousel">
-                    <div class="item item-video1">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/to1_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video2">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/to2_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to3_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to4_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to5_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to6_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to7_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video3">
-                        <video poster="" autoplay controls muted loop height="100%">\
-                            <!-- Your video file here -->
-                            <source src="static/videos/to8_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
-                <h2 class="title is-4 margin-top-10" style="margin-bottom: 0px;">Dynamic environments</h2>
-                <div class="carousel results-carousel">
-                    <div class="item item-video1">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/de1_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="item item-video2">
-                        <video poster="" autoplay controls muted loop height="100%">
-                            <!-- Your video file here -->
-                            <source src="static/videos/de2_compress.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                </div>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">FetchBot: Learning Generalizable Object Fetching in Cluttered Scenes via Zero-Shot Sim2Real</h1>
+  
+  
+            <div class="is-size-4 publication-authors">
+              <span class="author-block" style="font-size: 95%;">
+                <a href="https://weiheng-liu.github.io/">Weiheng Liu</a>*&nbsp;&nbsp;
+                <a href="https://github.com/Yaser-wyx">Yuxuan Wan</a>*&nbsp;&nbsp;
+                <a href="https://42jaylonw.github.io/">Jilong Wang</a>&nbsp;&nbsp;
+                <a href="https://yuxuank.com/">Yuxuan Kuang</a>&nbsp;&nbsp;
+                <a href="https://cwb0106.github.io/">Wenbo Cui</a>&nbsp;&nbsp;
+                <a href="https://scholar.google.com/citations?user=wRBbtl8AAAAJ&hl=en">Xuesong Shi</a>&nbsp;&nbsp;
+                <br>
+                <a href="https://scholar.google.com/citations?user=kalE5UIAAAAJ&hl=en">Haoran Li</a>&nbsp;&nbsp;
+                <a href="https://scholar.google.com/citations?user=RxvYlNQAAAAJ&hl=en">Dongbin Zhao</a>&nbsp;&nbsp;
+                <a href="https://scholar.google.com/citations?user=X7M0I8kAAAAJ&hl=en">Zhizheng Zhang</a><sup>†</sup>&nbsp;&nbsp;
+                <a href="https://hughw19.github.io/">He Wang</a><sup>†</sup>&nbsp;&nbsp;
+              </span>
             </div>
-        </div>
-    </section>
-
-
-    <!--BibTex citation -->
-    <section class="section" id="BibTeX">
-        <div class="container is-max-desktop content">
-            <h2 class="title">BibTeX</h2>
-            <pre><code>@misc{liu2025fetchbotobjectfetchingcluttered,
-        title={FetchBot: Object Fetching in Cluttered Shelves via Zero-Shot Sim2Real}, 
-        author={Weiheng Liu and Yuxuan Wan and Jilong Wang and Yuxuan Kuang and Xuesong Shi and Haoran Li and Dongbin Zhao and Zhizheng Zhang and He Wang},
-        year={2025},
-        eprint={2502.17894},
-        archivePrefix={arXiv},
-        primaryClass={cs.RO},
-        url={https://arxiv.org/abs/2502.17894}, 
-}
-            </code></pre>
-        </div>
-    </section>
-    <!--End BibTex citation -->
-
-
-    <footer class="footer">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-8">
-                    <div class="content">
-
-                        <p>
-                            This page was built using the <a
-                                href="https://github.com/eliahuhorwitz/Academic-project-page-template"
-                                target="_blank">Academic Project Page Template</a>.
-                        </p>
-
-                    </div>
-                </div>
+  
+            <div class="column">
+              <image src="./static/images/institution.jpg" style="width: 30%;"></image>
+           </div>
+  
+  
+           <div class="is-size-4 publication-authors" style="margin-bottom: 0.5cm; font-style: italic;">
+            CoRL 2025 
+            <span style="color:#E52020; font-style: italic;">(Oral Presentation)</span>
+          </div>
+  
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2502.17894"
+                     class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>PDF</span>
+                  </a>
+                </span>
+                <!-- arXiv Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2502.17894"
+                     class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>ArXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                    <a href="#video" class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <img src="./static/images/youtube.svg" alt="Youtube" />
+                        </span>
+                        <span>Video</span>
+                      </a>
+                </span>
+                <!-- OpenReview Link. -->
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark"
+                href="javascript:void(0);" style="pointer-events: none; cursor: default;">
+               <span class="icon">
+                 <img src="static/images/openreview.ico" alt="OpenReview" />
+               </span>
+               <span>OpenReview (coming soon)</span>
+             </a>
+             
+              </span>
+                <!-- twitter Link.
+                <span class="link-block">
+                  <a href="xxx"
+                     class="external-link button is-normal is-rounded is-dark" target="_blank">
+                    <span class="icon">
+                        <i class="fab fa-twitter"></i>
+                    </span>
+                    <span>Summary</span>
+                  </a>
+                </span> -->
+                <!-- Code Link. -->
+                <span class="link-block">
+                    <a class="external-link button is-normal is-rounded is-dark github-link"
+                    href="https://github.com/weiheng-liu/FetchBot" target="_blank">
+                   <span class="icon">
+                     <img src="./static/images/github-mark.svg" alt="GitHub" />
+                   </span>
+                   <span>Code (comming soon)</span>
+                 </a>
+                 
+                </span>
+              </div>
             </div>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <!-- Statcounter tracking code -->
 
-    <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+<section class="section is-small" id="overview">
+  <div class="container is-max-desktop">
+    <!-- <h2 class="title is-1 has-text-centered is-size-4-mobile">Overview</h2> -->
+    <img src="./static/images/teasear.png" alt="overview" style="width:1000px; height:auto;" />
 
-    <!-- End of Statcounter Code -->
+    <div class="content">
+      <p>
+        <b>FetchBot</b> is a sim-to-real framework achieving generalizable object fetching in cluttered
+        scenes. Its systematic design enables policy generalization and sim-to-real transferability across
+        diverse objects, varying layouts, and multiple end-effectors. 
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section is-small" id="video">
+  <div class="container is-max-desktop">
+    <h2 class="title is-1 has-text-centered is-size-3-mobile">Summary Video</h2>
+    <video controls width="100%">
+      <source src="./static/videos/summary_video.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section class="section is-small" id="framework">
+  <div class="container is-max-desktop">
+    <h2 class="title is-1 has-text-centered is-size-3-mobile">Framework: FetchBot</h2>
+    <h2 class="title is-3 is-size-4-mobile">Method Pipeline</h2>
+    <img src="./static/images/framework.png" alt="framework" />
+    <div class="content">
+      <p>
+        <b>FetchBot Pipeline.</b> In the (A) data generation stage, we use UniVoxGen to generate a diverse set of cluttered scenes and employ an RL-based Oracle policy to collect representative demonstrations. In the (B) 3D vision encoder pretraining stage, we first use the foundation model's predicted depth as an intermediate representation to mitigate the sim-to-real gap, then introduce an occupancy prediction task to learn a complete scene representation that can infer occluded regions. In the (C) vision policy training stage, we distill these expert demonstrations into a vision-based policy through imitation learning, which can achieve (D) zero-shot sim-to-real.
+      </p>
+    </div>
+    <h2 class="title is-3 is-size-4-mobile">Voxel-based Cluttered Scene Generator</h2>
+    <figure>
+        <div style="display: flex; align-items: center;">
+            <img src="static/images/univoxgen.png" alt="UniVoxGen" style="width:40%; margin-right:30px;" />
+          
+            <p style="width:50%; font-size: 16px; line-height:1.5;">
+              <b>UniVoxGen</b> efficiently generates realistic cluttered scenes by voxelizing objects and applying 
+              lightweight voxel operations—<em><b>Union</b></em>, <em><b>Intersection</b></em>, <em><b>Difference</b></em>, and 
+              <em><b>Transformation</b></em>. This enables the creation of a large-scale dataset of one million 
+              scenes, supporting oracle policy training and providing dense ground truth for occupancy prediction.
+            </p>
+          </div>
+          <img src="static/images/generated_scenes.png" 
+          alt="generated_scenes" 
+          style="width:80%; display:block; margin:40px auto 0;" />
+    <p style="text-align:center; font-size:17px; margin-top:10px;">
+        Generated cluttered scenes by UniVoxGen, including shelf, tabletop, drawer, and storage rack environments.
+      </p>
+    <figcaption></figcaption>
+    </figure>
+    <br>
+    <h2 class="title is-3 is-size-4-mobile">Dynamics-Aware Oracle Policy</h2>
+    <br>
+    <div style="text-align: center; margin: 5px 0;">
+        <img src="static/images/oracle.png" alt="oracle_policy" style="width:56%; margin-top: -10px;" />
+        <p style="margin: 4px 0;">Scene Encoder Network.</p>
+        <p style="max-width: 700px; margin: 6px auto; text-align: justify; font-size: 16px;">
+          The oracle policy leverages a hierarchical scene encoder to capture both local object details 
+          and global scene context, enabling robust representation of cluttered environments. Combined 
+          with a reward design that balances task success and minimal disturbance, it facilitates precise 
+          and efficient demonstration generation.
+        </p>
+      </div>
+
+      <h2 class="title is-3 is-size-4-mobile" style="margin-top:40px;">
+        Vision-based Imitation Learning
+      </h2>
+      <img src="static/images/perception.png" alt="perception" style="width:100%;" />
+        <p style="font-size:13.5px;">
+            Vision-based imitation learning employs <b>depth-based intermediate representations</b> for robust sim-to-real transfer, ensuring consistent action predictions. To address occlusion, it integrates <b>semantic occupancy prediction </b>with multi-view depth features via deformable cross-attention, enabling efficient and generalizable scene understanding. The resulting 3D scene representation is transformed into executable actions through <b>diffusion</b>.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-small has-background-black has-text-light" id="sim_result">
+  <div class="container is-max-desktop">
+    <h2 class="title is-1 has-text-centered is-size-3-mobile has-text-white">Simulation Results</h2>
+    <br>
+    <h2 class="title is-3 is-size-4-mobile has-text-white">Parallel Simulation</h2>
+    <figure>
+    <video autoplay muted loop playsinline src="static/videos/benchmark/army_short.mp4" width="100%"></video> # TODO
+    <figcaption></figcaption>
+    </figure>
+    <br>
+    <h2 class="title is-3 is-size-4-mobile has-text-white">Suction Cup</h2>
+    <figure>
+    <video autoplay muted loop playsinline src="static/videos/benchmark/combo_manip.mp4" width="100%"></video> # TODO
+    <figcaption></figcaption>
+    </figure>
+    <br>
+    <h2 class="title is-3 is-size-4-mobile has-text-white">Parallel Gripper</h2>
+    <figure>
+    <video autoplay muted loop playsinline src="static/videos/teaser-small.mp4" width="100%"></video> # TODO
+    <figcaption></figcaption>
+    </figure>
+    <h2 class="title is-3 is-size-4-mobile has-text-white">Occupancy Reconstruction (Top-Down View)</h2>
+    <div style="text-align: center;">
+        <img src="static/images/occ_sim.png" alt="occ_sim" style="width:90%; display:block; margin: 0 auto;" />
+        <p style="font-size: 0.9em; margin-top: 8px;">
+          (A) RGB-D voxel method misses crucial geometric details due to occlusion, leading to collision during fetching. 
+          (B) Our method can infer the occluded region, enabling successful collision avoidance.
+        </p>
+      </div>
+    <br>
+  </div>
+</section>
+
+
+<section class="section is-small" id="real_world_results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-1 has-text-centered is-size-3-mobile">Real World Results</h2>
+    <h2 class="title is-3 is-size-4-mobile">Comparison With Baselines</h2>
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <span style="font-size:1.3rem; font-weight:bold; margin-right:8px;">Choose type:</span>
+        <div class="select custom-select">
+          <select id="single-menu-task" onchange="updateMethodVideo()">
+            <option value="Suction_Cup" selected="selected">Suction Cup</option>
+            <option value="Parallel_Gripper">Parallel Gripper</option>
+            <option value="Misc_Type">Misc</option>
+          </select>
+        </div>
+        <style>
+            .custom-select select {
+              font-size: 1.0rem;   
+              padding: 6px 12px;   
+            }
+            </style>
+        
+        <br><br><br>
+        
+        <div id="normal-videos">
+          <div class="columns is-centered" id="result-video-first-row">
+            <div class="column is-half has-text-centered" id="result-video-ours">
+              <figure>
+                <video autoplay muted loop playsinline controls src="" width="90%" style="border-radius:10px;"></video>
+                <figcaption><b>FetchBot (Ours)</b></figcaption>
+              </figure>
+            </div>
+            <div class="column is-half has-text-centered" id="result-video-heuristic">
+              <figure>
+                <video autoplay muted loop playsinline controls src="" width="90%" style="border-radius:10px;"></video>
+                <figcaption>Heuristic</figcaption>
+              </figure>
+            </div>
+          </div>
+        
+          <div class="columns is-centered" id="result-video-second-row">
+            <div class="column is-half has-text-centered" id="result-video-dp">
+              <figure>
+                <video autoplay muted loop playsinline controls src="" width="90%" style="border-radius:10px;"></video>
+                <figcaption>DP</figcaption>
+              </figure>
+            </div>
+            <div class="column is-half has-text-centered" id="result-video-dp3">
+              <figure>
+                <video autoplay muted loop playsinline controls src="" width="90%" style="border-radius:10px;"></video>
+                <figcaption>DP3</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        
+        <div id="misc-videos" style="display:none;">
+          <div class="has-text-centered" id="misc-video-1">
+            <figure>
+                <video autoplay muted loop playsinline controls src="" width="50%" style="border-radius:10px;"></video>
+                <figcaption>Scenario 1</figcaption>
+              </figure>
+          </div>
+          <div class="has-text-centered" id="misc-video-2">
+            <figure>
+              <video autoplay muted loop playsinline controls src="" width="50%" style="border-radius:10px;"></video>
+              <figcaption>Scenario 2</figcaption>
+            </figure>
+          </div>
+          <div class="has-text-centered" id="misc-video-3">
+            <figure>
+              <video autoplay muted loop playsinline controls src="" width="50%" style="border-radius:10px;"></video>
+              <figcaption>Scenario 3</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+        <p>
+            Our approach achieves <b>strong sim-to-real performance</b>, outperforming methods that rely on 
+            <b>RGB (DP)</b> or <b>PointCloud (DP3)</b> representations.
+          </p>
+    </div>
+    <h2 class="title is-3 is-size-4-mobile">Generalize to Diverse Obstacles</h2>
+    <br>
+    
+    <div class="columns is-multiline is-centered has-text-centered">
+      <!-- Row 1 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/1.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 1</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/2.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 2</p> -->
+      </div>
+    
+      <!-- Row 2 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/3.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 3</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/4.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 4</p> -->
+      </div>
+    
+      <!-- Row 3 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/5.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 5</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/6.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 6</p> -->
+      </div>
+    
+      <!-- Row 4 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/7.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 7</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/8.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 8</p> -->
+      </div>
+    
+      <!-- Row 5 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/9.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 9</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/10.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 10</p> -->
+      </div>
+    
+      <!-- Row 6 -->
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/11.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 11</p> -->
+      </div>
+      <div class="column is-half">
+        <video autoplay muted loop playsinline controls src="static/videos/obstacles/12.mp4" width="90%" style="border-radius:10px;"></video>
+        <!-- <p>Video 12</p> -->
+      </div>
+    </div>
+    
+
+    <h2 class="title is-3 is-size-4-mobile">Generalize to Diverse Environments</h2>
+    <br>
+    <div class="columns is-multiline is-centered has-text-centered">
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/environments/1.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Storage Rack</p>
+        </div>
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/environments/2.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Storage Rack</p>
+        </div>
+      
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/environments/3.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Cabinet</p>
+        </div>
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/environments/4.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Cabinet</p>
+        </div>
+      </div>
+
+    <h2 class="title is-3 is-size-4-mobile">Dynamic Cases</h2>
+    <br>
+    <div class="columns is-centered has-text-centered">
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/dynamic/1.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Dynamic Scenario 1</p>
+        </div>
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/dynamic/2.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Dynamic Scenario 2</p>
+        </div>
+      </div>
+
+    <h2 class="title is-3 is-size-4-mobile">Broader Application</h2>
+    <br>
+    <div class="columns is-centered has-text-centered">
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/broader/1.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Tabletop Scenario</p>
+        </div>
+        <div class="column is-half">
+          <video autoplay muted loop playsinline controls src="static/videos/broader/2.mp4" width="90%" style="border-radius:10px;"></video>
+          <p>Drawer Scenario</p>
+        </div>
+      </div>
+      
+      <p style="margin-top:2px; font-size:1rem; line-height:1.6;">
+        Our method can also be <b>extended to other tasks.</b> Real-robot extension experiments 
+        showing successful fetching from cluttered tabletop (suction) and 
+        drawer (parallel gripper) settings.
+      </p>
+      
+
+      <h2 class="title is-3 is-size-4-mobile" style="margin-top:40px;">
+        Occ Prediction Results
+      </h2>
+    <br>
+    <div class="columns">
+        <div class="column"> 
+          <figure style="margin:0;">
+            <img src="static/images/occ_real.png"
+                 alt="Occ Prediction Result"
+                 style="width:100%; max-width:100%; height:auto; border-radius:10px;">
+          </figure>
+          <p style="margin-top:12px;">
+            <b>Real-world occupancy reconstruction</b> results, capable of handling diverse scenarios:
+            varying object shapes, different materials, and complex layouts.
+          </p>
+        </div>
+      </div>
+      <div class="columns" style="margin-top:16px; align-items:center;">
+        <div class="column is-half">
+          <figure style="margin:0;">
+            <img src="static/images/occ_compare.png"
+                 alt="Occ Compare"
+                 style="width:90%; height:auto; border-radius:10px;">
+          </figure>
+        </div>
+      
+        <div class="column is-half">
+            <p style="font-size:1rem; line-height:1.6;">
+              Comparison in the real world. <b>Direct RGB-D voxelization</b> often yields incomplete 
+              scenes in real-world settings, while our <b>occupancy method (Occ)</b> generates 
+              more complete representations.
+            </p>
+          
+            <p style="font-size:1rem; line-height:1.6; margin-top:10px;">
+              <b>Note:</b> Importantly, we do not feed the reconstructed voxels (final occupancy map) 
+              to the downstream policy. Instead, the policy receives intermediate latent 
+              features from the pre-trained encoder; although it never observes the final 
+              occupancy prediction, these auxiliary-task–enriched features allow it to 
+              implicitly capture the scene’s complete 3D geometry.
+            </p>
+          </div>
+      </div>
+
+      <h2 class="title is-3 is-size-4-mobile">Additional Demos with Corresponding Observations</h2>
+      <br>
+      
+      <div id="rolling-carousel" class="rolling-wrapper">
+        <button id="btn-prev" class="button is-light nav-btn" aria-label="Previous page">‹</button>
+      
+        <div class="viewport">
+          <div id="rolling-track" class="track"></div>
+        </div>
+      
+        <button id="btn-next" class="button is-light nav-btn" aria-label="Next page">›</button>
+      </div>
+      <div id="rolling-pager" class="has-text-right is-size-6" style="margin-top:6px;">Page 1 / 10</div>
+      
+      <style>
+        .rolling-wrapper {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          align-items: center;
+          gap: 12px;
+        }
+        .viewport {
+          overflow: hidden;
+          width: 100%;
+        }
+        .track {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr); 
+          gap: 10px;
+        }
+        .video-cell video {
+          width: 100%;
+          height: auto;
+          border-radius: 12px;
+        }
+        .video-caption {
+          margin-top: 6px;
+          text-align: center;
+          font-size: 1rem;
+          opacity: 0.85;
+        }
+        .nav-btn {
+          min-width: 45px;
+          height: 45px;
+          line-height: 1;
+          font-size: 22px;
+          border-radius: 999px;
+        }
+      </style>
+      
+      <script>
+        const ROLLING_TOTAL = 20;  
+        const PER_PAGE = 2;        
+        const basePath = "static/videos/rolling/"; 
+      
+        let currentPage = 0;
+      
+        function renderRolling() {
+          const track = document.getElementById("rolling-track");
+          const totalPages = Math.ceil(ROLLING_TOTAL / PER_PAGE);
+      
+          if (currentPage >= totalPages) currentPage = totalPages - 1;
+          if (currentPage < 0) currentPage = 0;
+      
+          const start = currentPage * PER_PAGE;
+          const end = Math.min(start + PER_PAGE, ROLLING_TOTAL);
+      
+          track.innerHTML = "";
+          for (let i = start; i < end; i++) {
+            const cell = document.createElement("div");
+            cell.className = "video-cell";
+            cell.innerHTML = `
+              <video autoplay muted loop playsinline controls src="${basePath}${i + 1}.mp4"></video>
+              <div class="video-caption">Demo ${i + 1}</div>
+            `;
+            track.appendChild(cell);
+          }
+      
+          document.getElementById("rolling-pager").textContent = `Page ${currentPage + 1} / ${totalPages}`;
+          document.getElementById("btn-prev").disabled = (currentPage === 0);
+          document.getElementById("btn-next").disabled = (currentPage === totalPages - 1);
+        }
+      
+        function setupRolling() {
+          document.getElementById("btn-prev").addEventListener("click", () => {
+            currentPage--;
+            renderRolling();
+          });
+          document.getElementById("btn-next").addEventListener("click", () => {
+            currentPage++;
+            renderRolling();
+          });
+          renderRolling();
+        }
+      
+        document.addEventListener("DOMContentLoaded", setupRolling);
+      </script>
+      
+      
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="box pt-6 pb-6">
+      <div class="columns is-max-desktop is-centered ">
+        <div class="column is-four-fifths is-centered">
+          <h2 class="title is-2 has-text-centered is-size-5-mobile">Try out FetchBot!</h2>
+          <video autoplay muted loop playsinline width="100%">
+            <source src="./static/videos/code_video.mp4" type="video/mp4">
+          </video>
+          <div class="content">
+            We will open-source <b>FetchBot</b>, which integrates <b>UniVoxGen</b> (an efficient scene generator), <b>Oracle Policy</b> (for data collection), <b>Vision-based Policy</b> (deployable on real robots), and <b>dataset</b> that includes cluttered scenes, expert demonstrations, and voxel data.
+          </div>
+          <div class="content">
+          </div>
+          <div class="has-text-centered">
+            <a href="https://github.com/weiheng-liu/FetchBot" class="github-link">
+              <button class="button is-primary">Download Code (coming soon)</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section is-small">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 is-size-4-mobile">Our Team</h2>
+    <div class="container has-text-centered">
+      <div class="publication-authors is-flex justify-content is-justify-content-space-around">
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://weiheng-liu.github.io/">
+              <img class="is-rounded
+                      " src="./static/images/authors/weiheng_liu_2.jpg" alt="Weiheng Liu">
+            </a>
+          </figure>
+          <a href="https://weiheng-liu.github.io/">Weiheng Liu</a><sup>1,3,4,*</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://github.com/Yaser-wyx">
+              <img class="is-rounded
+                      " src="./static/images/authors/yuxuan_wan_2.jpg" alt="Yuxuan Wan">
+            </a>
+          </figure>
+          <a href="https://github.com/Yaser-wyx">Yuxuan Wan</a><sup>2,3,*</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://42jaylonw.github.io/">
+              <img class="is-rounded
+                      " src="./static/images/authors/jilong.jpeg" alt="Jilong Wang">
+            </a>
+          </figure>
+          <a href="https://42jaylonw.github.io/">Jilong Wang</a><sup>2,3</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://yuxuank.com/">
+              <img class="is-rounded
+                      " src="./static/images/authors/yuxuan.jpg" alt="Yuxuan Kuang">
+            </a>
+          </figure>
+          <a href="https://yuxuank.com/">Yuxuan Kuang</a><sup>2</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+            <figure class="image is-128x128">
+              <a href="https://cwb0106.github.io/">
+                <img class="is-rounded
+                        " src="./static/images/authors/wenbo_cui.jpg" alt="Wenbo Cui">
+              </a>
+            </figure>
+            <a href="https://cwb0106.github.io/">Wenbo Cui</a><sup>1,3,4</sup>
+          </div>
+      </div>
+      <br>
+      <div class="publication-authors is-flex justify-content is-justify-content-space-around">
+        <div class="author-block has-text-centered has-addons-centered">
+            <figure class="image is-128x128">
+              <a href="https://scholar.google.com/citations?user=wRBbtl8AAAAJ&hl=en">
+                <img class="is-rounded
+                        " src="./static/images/authors/xuesong_shi_21.jpg" alt="Xuesong Shi">
+              </a>
+            </figure>
+            <a href="https://scholar.google.com/citations?user=wRBbtl8AAAAJ&hl=en">Xuesong Shi</a><sup>4</sup>
+          </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://scholar.google.com/citations?user=kalE5UIAAAAJ&hl=en">
+              <img class="is-rounded
+                      " src="./static/images/authors/haoran_li.jpg" alt="Haoran Li">
+            </a>
+          </figure>
+          <a href="https://scholar.google.com/citations?user=kalE5UIAAAAJ&hl=en">Haoran Li</a><sup>1</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://scholar.google.com/citations?user=RxvYlNQAAAAJ&hl=en">
+              <img class="is-rounded
+                      " src="./static/images/authors/dongbin_zhao.jpg" alt="Dongbin Zhao">
+            </a>
+          </figure>
+          <a href="https://scholar.google.com/citations?user=RxvYlNQAAAAJ&hl=en">Dongbin Zhao</a><sup>1</sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+          <figure class="image is-128x128">
+            <a href="https://scholar.google.com/citations?user=X7M0I8kAAAAJ&hl=en">
+              <img class="is-rounded
+                      " src="./static/images/authors/zhangzhizheng.jpeg" alt="Zhizheng Zhang">
+            </a>
+          </figure>
+          <a href="https://scholar.google.com/citations?user=X7M0I8kAAAAJ&hl=en">Zhizheng Zhang</a><sup>3,4,<sup>†</sup></sup>
+        </div>
+        <div class="author-block has-text-centered has-addons-centered">
+            <figure class="image is-128x128">
+              <a href="https://hughw19.github.io/">
+                <img class="is-rounded
+                        " src="./static/images/authors/he_wang.jpg" alt="He Wang">
+              </a>
+            </figure>
+            <a href="https://hughw19.github.io/">He Wang</a><sup>2,3,4,<sup>†</sup></sup>
+          </div>
+      </div>
+
+      <br>
+      <div class="publication-authors">
+        <span class="author-block"><sup>1</sup>Institute of Automation, Chinese Academy of Sciences, </span>
+        <br>
+        <span class="author-block"><sup>2</sup>CFCS, School of Computer Science, Peking University, </span>
+        <br>
+        <span class="author-block"><sup>3</sup>Galbot, </span>
+        <span class="author-block"><sup>4</sup>Beijing Academy of Artificial Intelligence</span>
+        <br>
+        <span class="author-block">* Equal contributions</span>
+        <span class="author-block"><sup>†</sup> Corresponding authors</span>
+      </div>
+
+
+    </div>
+    <br>
+    <pre><code>@article{liu2025fetchbot,
+        title={FetchBot: Object Fetching in Cluttered Shelves via Zero-Shot Sim2Real},
+        author={Liu, Weiheng and Wan, Yuxuan and Wang, Jilong and Kuang, Yuxuan and Shi, Xuesong and Li, Haoran and Zhao, Dongbin and Zhang, Zhizheng and Wang, He},
+        journal={arXiv preprint arXiv:2502.17894},
+        year={2025}
+      }</code></pre>
+    <br>
+    <p>
+      If you have any questions, please contact<a href="weihliu2002@gmail.com"> Weiheng Liu</a> and <a href="yaser_wyx@163.com">Yuxuan Wan</a>.
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template modified from <a href="https://usc-gvl.github.io/SkillBlender-web/">SkillBlender</a>, <a href="https://umi-on-legs.github.io/">UMI on Legs</a>, <a href="https://agile.human2humanoid.com/">ASAP</a> and <a href="https://nerfies.github.io/">Nerfies</a>.
+          </p>
+          <p>
+            This website is licensed under a <a rel="license"
+              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow and modify the <a
+              href="https://github.com/nerfies/nerfies.github.io">source
+              code</a> of this website as long as
+            you link back to the <a href="https://nerfies.github.io/">NeRFies</a> page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
 
 </body>
 
