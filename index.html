@@ -37,7 +37,7 @@
 
 
 <body onload = "onLoadFunction();">
-<section class = "hero is-fullheight is-link" id="block1"
+<section class = "hero is-fullheight is-link" id = "block1"
          style = "overflow: hidden; position:relative;background-color: transparent;">
     <div class = "hero-video" style = "height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
         <video playsinline autoplay muted loop>
@@ -46,7 +46,7 @@
     </div>
     <!-- Hero head: will stick at the top -->
     <div class = "hero-head is-hidden-mobile  transition-a">
-        <header class = "navbar blur-glass" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
+        <header class = "navbar blur-glass" style = "border-bottom: 1px solid rgba(255, 255, 255, 0.2)">
             <div class = "navbar-menu">
                 <div class = "navbar-end">
                     <a class = "navbar-item pl-4 pr-4" href = "static/pdfs/CoRL_2025__FetchBot.pdf"
@@ -161,7 +161,7 @@
     </div>
 </section>
 
-<section class = "hero" id="block2">
+<section class = "hero" id = "block2">
     <div class = "hero-body">
         <div class = "container">
             <div class = "columns is-centered">
@@ -228,9 +228,9 @@
                       </a>
                 </span>
                             <!-- OpenReview Link. -->
-                            <span class = "link-block hvr-pulse-shrink">
+                            <span class = "link-block ">
                                 <a class = "external-link button is-normal is-rounded is-dark"
-                                   href = "javascript:void(0);" style = "pointer-events: none; cursor: default;">
+                                   href = "javascript:void(0);"  target = "_blank" style = "pointer-events: none; cursor: default;">
                                <span class = "icon">
                                  <img src = "static/images/openreview.ico" alt = "OpenReview"/>
                                </span>
@@ -251,7 +251,7 @@
                             <!-- Code Link. -->
                             <span class = "link-block ">
                     <a class = "external-link button is-normal is-rounded is-dark github-link"
-                       href = "https://github.com/weiheng-liu/FetchBot" target = "_blank">
+                       href = "javascript:void(0);" target = "_blank" style = "pointer-events: none; cursor: default;">
                    <span class = "icon">
                      <img src = "./static/images/github-mark.svg" alt = "GitHub"/>
                    </span>
@@ -373,28 +373,28 @@
 
 <section class = "section is-small has-background-black has-text-light" id = "sim_result">
     <h2 class = "title is-1 has-text-centered is-size-3-mobile has-text-white">Simulation Results</h2>
-    <div class = "container is-max-desktop card-hover-dark">
-        <h2 class = "title is-3 is-size-4-mobile has-text-white">Parallel Simulation</h2>
-        <figure>
-            <video autoplay muted loop playsinline src = "" width = "100%"></video>
-            <figcaption></figcaption>
-        </figure>
-    </div>
-    <div class = "container is-max-desktop card-hover-dark">
-        <h2 class = "title is-3 is-size-4-mobile has-text-white">Suction Cup</h2>
-        <figure>
-            <video autoplay muted loop playsinline src = "" width = "100%"></video>
-            <figcaption></figcaption>
-        </figure>
-    </div>
-    <div class = "container is-max-desktop card-hover-dark">
-        <h2 class = "title is-3 is-size-4-mobile has-text-white">Parallel Gripper</h2>
-        <figure>
-            <video autoplay muted loop playsinline src = "" width = "100%"></video>
-            <figcaption></figcaption>
-        </figure>
+    <!-- <div class = "container is-max-desktop card-hover-dark">
+         <h2 class = "title is-3 is-size-4-mobile has-text-white">Parallel Simulation</h2>
+         <figure>
+             <video autoplay muted loop playsinline src = "" width = "100%"></video>
+             <figcaption></figcaption>
+         </figure>
+     </div>
+     <div class = "container is-max-desktop card-hover-dark">
+         <h2 class = "title is-3 is-size-4-mobile has-text-white">Suction Cup</h2>
+         <figure>
+             <video autoplay muted loop playsinline src = "" width = "100%"></video>
+             <figcaption></figcaption>
+         </figure>
+     </div>
+     <div class = "container is-max-desktop card-hover-dark">
+         <h2 class = "title is-3 is-size-4-mobile has-text-white">Parallel Gripper</h2>
+         <figure>
+             <video autoplay muted loop playsinline src = "" width = "100%"></video>
+             <figcaption></figcaption>
+         </figure>
 
-    </div>
+     </div>-->
     <div class = "container is-max-desktop card-hover-dark">
         <h2 class = "title is-3 is-size-4-mobile has-text-white">Occupancy Reconstruction (Top-Down View)</h2>
         <div style = "text-align: center;">
